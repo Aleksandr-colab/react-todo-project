@@ -1,5 +1,4 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 export default function NewTaskForm({ onAdd }) {
   const [text, setText] = useState('');
@@ -7,12 +6,13 @@ export default function NewTaskForm({ onAdd }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!text.trim()) return;
+
     onAdd(text);
     setText('');
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="new-todo-form" onSubmit={handleSubmit}>
       <input
         className="new-todo"
         placeholder="What needs to be done?"
@@ -20,6 +20,7 @@ export default function NewTaskForm({ onAdd }) {
         onChange={(e) => setText(e.target.value)}
         autoFocus
       />
+      <button type="submit" style={{ display: 'none' }}></button>
     </form>
   );
 }

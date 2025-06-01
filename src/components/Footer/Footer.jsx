@@ -2,16 +2,18 @@ import React from 'react';
 import TasksFilter from '../TasksFilter/TasksFilter';
 import './Footer.module.css';
 
-export default function Footer({ tasks, currentFilter, onSetFilter, onClearCompleted }) {
+
+
+export default function Footer({ tasks, currentFilter, onSetFilter }) {
   const activeCount = tasks.filter(t => !t.completed).length;
 
   return (
     <footer className="footer">
-      <span className="todo-count">{activeCount} item{activeCount !== 1 ? 's' : ''} left</span>
+      <span className="todo-count">
+        {activeCount} item{activeCount !== 1 ? 's' : ''} left
+      </span>
       <TasksFilter currentFilter={currentFilter} onSetFilter={onSetFilter} />
-      <button className="clear-completed" onClick={onClearCompleted}>
-        Clear completed
-      </button>
+      <button className="clear-completed">Clear completed</button>
     </footer>
   );
 }

@@ -1,8 +1,8 @@
 import React from 'react';
 import Task from '../Task/Task';
-import './TaskList.module.css';
 
-export default function TaskList({ tasks, onDelete, onToggle, onEdit }) {
+
+export default function TaskList({ tasks, onDelete, onToggle, onStart, onStop }) {
   return (
     <ul className="todo-list">
       {tasks.map(task => (
@@ -11,7 +11,8 @@ export default function TaskList({ tasks, onDelete, onToggle, onEdit }) {
           task={task}
           onDelete={onDelete}
           onToggle={onToggle}
-          onSave={onEdit}
+          onStart={onStart}
+          onStop={onStop}
         />
       ))}
     </ul>
