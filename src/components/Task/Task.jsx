@@ -1,25 +1,23 @@
-import { useState } from 'react';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './Task.module.css';
 import { formatDistanceToNow } from 'date-fns';
 
-
-
-function formatTime(seconds) {
-  const mins = String(Math.floor(seconds / 60)).padStart(2, '0');
-  const secs = String(seconds % 60).padStart(2, '0');
-  return `${mins}:${secs}`;
-}
-
-export default function Task({ task, onDelete, onToggle, onStart, onStop }) {
-  const [timeAgo] = useState(
+export default function Task({ task, onDelete, onToggle }) {
+  const [timeAgo, setTimeAgo] = useState(
     formatDistanceToNow(new Date(task.createdAt), { addSuffix: true })
   );
 
-  const handleComplete = () => {
-    if (task.isRunning) onStop(task.id); 
-    onToggle(task.id);
-  };
+  useEffect(() => {
+    
+    const intervalId = setInterval(() => {
+      setTimeAgo(
+        formatDistanceToNow(new Date(task.createdAt), { addSuffix: true })
+      );
+    }, 1000);
+
+    
+    return () => clearInterval(intervalId);
+  }, [task.createdAt]);
 
   return (
     <li className={task.completed ? 'completed' : ''}>
@@ -28,31 +26,17 @@ export default function Task({ task, onDelete, onToggle, onStart, onStop }) {
           className="toggle"
           type="checkbox"
           checked={task.completed}
-          onChange={handleComplete}
+          onChange={() => onToggle(task.id)}
         />
         <label>
-          <span className="title">{task.text}</span>
-          <span className="description">
-            {!task.completed ? (
-              <>
-                <button
-                  className="icon icon-play"
-                  onClick={() => onStart(task.id)}
-                  type="button"
-                ></button>
-                <button
-                  className="icon icon-pause"
-                  onClick={() => onStop(task.id)}
-                  type="button"
-                ></button>
-              </>
-            ) : null}
-            {formatTime(task.timeSpent)}
-          </span>
-          <span className="description">created {timeAgo}</span>
+          <span className="description">{task.text}</span>
+          <span className="created">created {timeAgo}</span>
         </label>
         <button className="icon icon-edit"></button>
-        <button className="icon icon-destroy" onClick={() => onDelete(task.id)}></button>
+        <button
+          className="icon icon-destroy"
+          onClick={() => onDelete(task.id)}
+        ></button>
       </div>
     </li>
   );
